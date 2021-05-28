@@ -9,3 +9,6 @@ def home(request):
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})
+
+def special(request):
+    return render(request, 'blog/special.html')

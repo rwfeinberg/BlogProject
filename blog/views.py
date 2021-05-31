@@ -1,21 +1,19 @@
+# Contains both function-based and class-based views in Django
+
 from typing import List
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 
-def home(request):
-    context = {
-        'posts': Post.objects.all()
-    }
-    return render(request, 'blog/home.html', context)
-
+# Class-based: Defines post page located at '/post/#/'
 class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
 
+# Class-based: Defines post page located at '/post/#/'
 class PostDetailView(DetailView):
     model = Post
 

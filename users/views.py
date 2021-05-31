@@ -4,10 +4,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
+# Function-based: defines registration page located at '/register/'
 def register(request):
-    if request.method == 'POST':
+    if request.method == 'POST':                        # Check for POST request
         form = UserRegisterForm(request.POST)
-        if form.is_valid():
+        if form.is_valid():                             # Check for valid registration (non already existing user, valid password, ...)
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}! You may now log in.')
@@ -16,13 +17,15 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
-@login_required
+@login_required                         # Decorator to require a logged in user
+# Function-based: Defines profile page located at '/profile/'
 def profile(request):
-    if request.method == 'POST':
+    if request.method == 'POST':                        # Check for POST request
+        # set variables for user or profile updating
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if u_form.is_valid() and p_form.is_valid():
+        if u_form.is_valid() and p_form.is_valid():     # Check for both valid user and profile updates
             u_form.save()
             p_form.save()
             messages.success(request, f'Your profile has been updated.')

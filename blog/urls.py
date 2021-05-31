@@ -3,6 +3,9 @@ from django.urls import path
 from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 from . import views
 
+# List of urls reachable within blog app
+# Format: 
+# path((url), (view to be used from views.py), (name))
 urlpatterns = [
     path('', PostListView.as_view(), name='blog-home'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),

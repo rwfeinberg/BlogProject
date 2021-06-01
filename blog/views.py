@@ -1,10 +1,11 @@
 # Contains both function-based and class-based views in Django
 
 from typing import List
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
+from django.contrib.auth.models import User
 
 # Class-based: Defines home page located at '/'. 
 class PostListView(ListView):
@@ -12,7 +13,19 @@ class PostListView(ListView):
     template_name = 'blog/home.html'                        # HTML template for page
     context_object_name = 'posts'                           # name of 'object' within template
     ordering = ['-date_posted']                             # how to order posts on homepage
-    paginate_by = 5
+    paginate_by = 5                                         # objects per page
+
+# Class-based: Defines home page located at '/user/USERNAME'. 
+class UserPostListView(ListView):
+    model = Post                                            # active model
+    template_name = 'blog/user_posts.html'                  # HTML template for page
+    context_object_name = 'posts'                           # name of 'object' within template                            # how to order posts on homepage
+    paginate_by = 5                                         # objects per page
+
+    def get_queryset(self):                                 # overridden method to get posts from user
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Post.objects.filter(author=user).order_by('-date_posted')
+
 
 # Class-based: Defines post page located at '/post/#/'
 class PostDetailView(DetailView):

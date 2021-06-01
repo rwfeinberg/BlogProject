@@ -12,6 +12,7 @@ class PostListView(ListView):
     template_name = 'blog/home.html'                        # HTML template for page
     context_object_name = 'posts'                           # name of 'object' within template
     ordering = ['-date_posted']                             # how to order posts on homepage
+    paginate_by = 5
 
 # Class-based: Defines post page located at '/post/#/'
 class PostDetailView(DetailView):
